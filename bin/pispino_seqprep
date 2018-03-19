@@ -11,7 +11,7 @@ __email__      = "h.s.gweon@reading.ac.uk"
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description = "PIPITS_PREP: reindex, join, quality filter, convert and merge!")
+    parser = argparse.ArgumentParser(description = "pispino_seqprep: reindex, join, quality filter, convert and merge!")
     parser.add_argument(
         "-i",
         action = "store",
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         action = "store",
         dest = "listfile",
         metavar = "<FILE>",
-        help = "Tap separated file with three columns for sample ids, forward-read filename and reverse-read filename. PIPITS_PREP will process only the files listed in this file.",
+        help = "Tap separated file with three columns for sample ids, forward-read filename and reverse-read filename. Only the files listed in this file will be processed.",
         required = False)
     parser.add_argument(
         "--FASTX-q",
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     summary_file = open(options.outputdir + "/summary.log", "w")
 
     # Start!
-    logger_info("PIPITS_PREP started", logging_file)
+    logger_info(BLUE + "pispino_seqprep started" + ENDC, logging_file)
 
 
     # Check for the presence of rawdata directory
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
     # Load sampleids and filenames
     if options.listfile:
-        logger_info("Processing the listfile", logging_file)
+        logger_info(HEADER + "Checking listfile" + ENDC, logging_file)
         try:
             listfile = open(options.listfile, "r")
         except IOError:
@@ -156,8 +156,9 @@ if __name__ == '__main__':
                 sampleids.append(line_split[0])
                 fastqs_f.append(line_split[1])
                 fastqs_r.append(line_split[2])
-
         listfile.close()
+        logger_info(GREEN + "... done" + ENDC, logging_file)
+
     else:
         logger_error("Please run pipits_getreadpairslist or pipits_getreadsingleslist to generate a list file", logging_file)
         exit(1)
@@ -168,14 +169,15 @@ if __name__ == '__main__':
         exit(1)
 
     # Count
+    logger_info(HEADER + "Counting sequences in rawdata" + ENDC, logging_file)
     count_sequences(input_dir = options.dataDir,
                     filenames_list = fastqs_f,
                     logging_file = logging_file,
                     summary_file = summary_file,
                     verbose = options.verbose)
 
-    # Forward reads
-    logger_info("Reindexing forward reads", logging_file)
+    # Re-index forward reads
+    logger_info(HEADER + "Reindexing forward reads" + ENDC, logging_file)
     reindex_fastq(input_dir = options.dataDir,
                   output_dir = options.outputdir + "/tmp/reindex_fastq_F",
                   sampleids_list = sampleids,
@@ -183,9 +185,10 @@ if __name__ == '__main__':
                   logging_file = logging_file,
                   summary_file = summary_file,
                   verbose = options.verbose)
+    logger_info(GREEN + "... done" + ENDC, logging_file)
 
-    # Reverse reads
-    logger_info("Reindexing reverse reads", logging_file)
+    # Re-index reverse reads
+    logger_info(HEADER + "Reindexing reverse reads" + ENDC, logging_file)
     reindex_fastq(input_dir = options.dataDir,
                   output_dir = options.outputdir + "/tmp/reindex_fastq_R",
                   sampleids_list = sampleids,
@@ -193,7 +196,7 @@ if __name__ == '__main__':
                   logging_file = logging_file,
                   summary_file = summary_file,
                   verbose = options.verbose)
-
+    logger_info(GREEN + "... done" + ENDC, logging_file)
 
     # Join
     if options.forwardreadsonly:
@@ -251,14 +254,12 @@ if __name__ == '__main__':
 
     # Clean up tmp_directory
     if not options.retain:
-        logger_info("Cleaning temporary directory", logging_file)
+        logger_info(HEADER + "Cleaning temporary directory" + ENDC, logging_file)
         shutil.rmtree(options.outputdir + "/tmp")
-
+        logger_info(GREEN + "... done" + ENDC, logging_file)
 
     # Done
-    logger_info("PIPITS_PREP completed.", logging_file)
-    logger_info("Next Step: PIPITS_FUNITS [ Example: pipits_funits -i " + options.outputdir + "/" + "prepped.fasta -o pipits_funits -x ITS2]", logging_file)
-    logger_info("N.B. PIPITS_FUNITS can take a few days (or weeks!) depending on the diversity of the samples.", logging_file)
+    logger_info(GREEN + "Done" + ENDC + " - pispino_seqprep completed (Resulting file: " + options.outputdir + "/prepped.fasta)" + ENDC, logging_file)
 
     logging_file.close()
     summary_file.close()

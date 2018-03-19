@@ -2,7 +2,7 @@
 import argparse, sys, os, argparse, shutil, subprocess, gzip, bz2
 
 __author__     = "Hyun Soon Gweon"
-__copyright__  = "Copyright 2015, The PIPITS Project"
+__copyright__  = "Copyright 2015, Originally from the PIPITS Project"
 __credits__    = ["Hyun Soon Gweon", "Anna Oliver", "Joanne Taylor", "Tim Booth", "Melanie Gibbs", "Daniel S. Read", "Robert I. Griffiths", "Karsten Schonrogge"]
 __license__    = "GPL"
 __maintainer__ = "Hyun Soon Gweon"
@@ -14,6 +14,13 @@ FASTQJOIN                  = "fastq-join"
 FASTX_FASTQ_QUALITY_FILTER = "fastq_quality_filter"
 FASTX_FASTQ_TO_FASTA       = "fastq_to_fasta"
 
+HEADER = "\033[95m"
+BLUE = "\033[94m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+CYAN = "\033[96m"
+RED = "\033[91m"
+ENDC = "\033[0m"
 
 # For summary
 def blocks(files, size=65536):
@@ -99,7 +106,6 @@ def count_sequences(input_dir,
                     summary_file, 
                     verbose):
     
-    logger_info("Counting sequences in rawdata", logging_file)
 
     filenameextensions = []
     for filename in filenames_list:
@@ -113,7 +119,7 @@ def count_sequences(input_dir,
     for filename in filenames_list:
         numberofsequences += int(getFileLineCount(input_dir  + "/" + filename, extensionType) / 4)
 
-    logger_info("  Number of reads: " + str(numberofsequences), logging_file)
+    logger_info(GREEN + "... number of reads: " + str(numberofsequences) + ENDC, logging_file)
 
     # Write to summary_file
     summary_file.write("Number of reads: " + str(numberofsequences) + "\n")
@@ -213,7 +219,7 @@ def justForwardReads(input_dir_f,
         filename = output_dir  + "/" + sampleids_list[i]+ ".fastq"
         numberofsequences += int(getFileLineCount(filename) / 4)
 
-    logger_info("  Number of forward reads: " + str(numberofsequences), logging_file)
+    logger_info("... number of forward reads: " + str(numberofsequences), logging_file)
     summary_file.write("Number of forward reads: " + str(numberofsequences) + "\n")
 
 
@@ -230,7 +236,7 @@ def join(input_dir_f,
          summary_file,
          verbose):
 
-    logger_info("Joining paired-end reads" + " " + "[" + joiner_method + "]", logging_file)
+    logger_info(HEADER + "Joining paired-end reads" + " " + "[" + joiner_method + "]" + ENDC, logging_file)
 
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
@@ -308,7 +314,7 @@ def join(input_dir_f,
         filename = output_dir  + "/" + sampleids_list[i]+ ".fastq"
         numberofsequences += int(getFileLineCount(filename) / 4)
     
-    logger_info("  Number of joined reads: " + str(numberofsequences), logging_file)
+    logger_info(GREEN + "... number of joined reads: " + str(numberofsequences) + ENDC, logging_file)
     summary_file.write("Number of joined reads: " + str(numberofsequences) + "\n")
 
 
@@ -322,7 +328,7 @@ def qualityfilter(input_dir,
                   summary_file,
                   verbose):
 
-    logger_info("Quality filtering [FASTX]", logging_file)
+    logger_info(HEADER + "Quality filtering [FASTX]" + ENDC, logging_file)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     else:
@@ -350,7 +356,7 @@ def qualityfilter(input_dir,
         filename = output_dir  + "/" + sampleids_list[i]+ ".fastq"
         numberofsequences += int(getFileLineCount(filename) / 4)
 
-    logger_info("  Number of quality filtered reads: " + str(numberofsequences), logging_file)
+    logger_info(GREEN + "... number of quality filtered reads: " + str(numberofsequences) + ENDC, logging_file)
     summary_file.write("Number of quality filtered reads: " + str(numberofsequences) + "\n")
 
 
@@ -364,10 +370,8 @@ def convert(input_dir,
             verbose):
 
     # Removing reads with \"N\" and FASTA conversion
-    if FASTX_fastq_to_fasta_n:
-        logger_info("Converting FASTQ to FASTA [FASTX] (also removing reads with \"N\" nucleotide", logging_file)
-    else:
-        logger_info("Converting FASTQ to FASTA [FASTX]", logging_file)
+    logger_info(HEADER + "Converting FASTQ to FASTA [FASTX] (also removing reads with \"N\" nucleotide if specified with \"--FASTX-n\")" + ENDC, logging_file)
+
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     else:
@@ -401,7 +405,7 @@ def convert(input_dir,
         filename = output_dir  + "/" + sampleids_list[i]+ ".fasta"
         numberofsequences += int(getFileLineCount(filename) / 2)
 
-    logger_info("  Number of prepped sequences: " + str(numberofsequences), logging_file)
+    logger_info(GREEN + "... number of prepped sequences: " + str(numberofsequences) + ENDC, logging_file)
     summary_file.write("Number of prepped sequences: " + str(numberofsequences) + "\n")
 
 
@@ -412,7 +416,7 @@ def merge(input_dir,
           verbose):
 
     # Merge all into a file
-    logger_info("Merging all into a single file", logging_file)
+    logger_info(HEADER + "Merging into a single file" + ENDC, logging_file)
 
     outfile = open(output_dir + "/prepped.fasta", "w")
     for i in range(len(sampleids_list)):
@@ -424,15 +428,5 @@ def merge(input_dir,
             outfile.write(line.rstrip() + "\n")
     outfile.close()
 
-
-def clean(options):
-
-    # Clean up tmp_directory
-    if not options.retain:
-        logger.info("Cleaning temporary directory")
-        shutil.rmtree(tmpDir)
-
-    logger.info("pispino_seqprep completed.")
-    logger.info("Resulting files are in: " + options.outputdir)
-    summary_file.close()
+    logger_info(GREEN + "... done" + ENDC, logging_file)
 

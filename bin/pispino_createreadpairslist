@@ -13,12 +13,12 @@ except ImportError:
 
 from time import strftime
 
-__author__ = "Hyun Soon Gweon"
-__copyright__ = "Copyright 2015, The PIPITS Project"
-__credits__ = ["Hyun Soon Gweon", "Anna Oliver", "Joanne Taylor", "Tim Booth", "Melanie Gibbs", "Daniel S. Read", "Robert I. Griffiths", "Karsten Schonrogge"]
-__license__ = "GPL"
+__author__     = "Hyun Soon Gweon"
+__copyright__  = "Copyright 2015, Originally from the PIPITS Project"
+__credits__    = ["Hyun Soon Gweon", "Anna Oliver", "Joanne Taylor", "Tim Booth", "Melanie Gibbs", "Daniel S. Read", "Robert I. Griffiths", "Karsten Schonrogge"]
+__license__    = "GPL"
 __maintainer__ = "Hyun Soon Gweon"
-__email__ = "h.s.gweon@reading.ac.uk"
+__email__      = "h.s.gweon@reading.ac.uk"
 
 HEADER = "\033[95m"
 BLUE = "\033[94m"
@@ -30,7 +30,7 @@ ENDC = "\033[0m"
 
 def make_read_pairs_list(options):
 
-    print(GREEN + "Generating a read-pair list file from the input directory..." + ENDC)
+    print(BLUE + "Generating a read-pair list file from the input directory..." + ENDC)
 
     samples = []
     fastqs = []
@@ -100,7 +100,7 @@ def make_read_pairs_list(options):
         outfile_fastqslist.write(label + "\t" + fastqs_f[i] + "\t" + fastqs_r[i] + "\n")
     outfile_fastqslist.close()
 
-    print("Done. \"" + outfile_name + "\" created.")
+    print(GREEN + "Done - " + ENDC +  "\"" + outfile_name + "\" created")
 
 
 if __name__ == '__main__':
