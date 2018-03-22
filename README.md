@@ -66,16 +66,3 @@ $ pispino_seqprep -i rawdata -o pispino_seqprep_output -l readpairslist.txt
 ```shell
 $ source deactivate
 ```
-
-
-**(Optional) Test with a test dataset**
-
-Download a test dataset from [here]() and save it in a directory of your choice (yourdirectory), uncompress it then run:
-
-```shell
-$ cd yourdirectory
-$ wget __
-$ unzip __
-$ pispino_createreadpairslist -i rawdata -o readpairslist.txt
-$ pispino_seqprep -i rawdata -o pispino_seqprep_output -t 30 -l readpairslist.txt
-```
