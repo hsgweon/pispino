@@ -4,7 +4,7 @@ import os, subprocess, sys
 from pispino.logger import *
 from pispino.colours import *
 
-__version__    = 2.0
+__version__     = 2.0
 
 __author__      = "Hyun Soon Gweon"
 __copyright__   = "Copyright 2015, The PIPITS Project"
@@ -21,9 +21,9 @@ def run_cmd(command, log_file, verbose):
 
     for l in p.stdout:
         if verbose:
-            logger(str(l, 'utf-8').rstrip(), log_file, display = True, timestamp = False)
+            logger(l.decode("utf8").rstrip(), log_file, display = True, timestamp = False)
         else:
-            logger(str(l, 'utf-8').rstrip(), log_file, display = False, timestamp = False)
+            logger(l.decode("utf8").rstrip(), log_file, display = False, timestamp = False)
 
     p.wait()
     FNULL.close()
