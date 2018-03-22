@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-__version__ = os.environ.get("VERSION", "1.0")
+__version__ = os.environ.get("VERSION", "1.1")
 
 setup(
     name = "pispino",
