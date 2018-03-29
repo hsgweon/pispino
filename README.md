@@ -16,12 +16,12 @@ $ conda config --add channels bioconda
 ```
 
 ### Create a Conda environment with PISPINO
-It is recommended that you use [Conda](https://conda.io/) environment so that you install tools and dependencies in this "sandbox" environment without messing with your system. Don't worry, it's easy - just type the following command.
+It is recommended that you use [Conda](https://conda.io/) environment so that you install tools and dependencies in this "sandbox" environment without messing with your system. Don't worry, it's easy - just type the following command. N.B. pispino only supports Python3, but none of this should matter if you use the Conda environment. **It should just work**.
 
 > create a Conda environment (here named "myNGSenv" but you can choose any name)
 
 ```shell
-$ conda create -n myNGSenv pispino
+$ conda create -n myNGSenv python=3.6 pispino 
 ```
 
 
